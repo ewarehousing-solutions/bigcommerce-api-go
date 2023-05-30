@@ -6,7 +6,7 @@
 package main
 
 import (
-    "github.com/gpmd/bigcommerce-api-go"
+    "github.com/TimmyGuy/bigcommerce-api-go"
     "log"
 )
 
