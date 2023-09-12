@@ -9,6 +9,10 @@ import (
 	"strings"
 )
 
+type LocationResource struct {
+	Locations []Location `json:"data"`
+}
+
 type Location struct {
 	ID                      int64                  `json:"id,omitempty"`
 	Code                    string                 `json:"code"`
@@ -91,13 +95,13 @@ func (bc *Client) GetLocations(filters map[string]string) ([]Location, error) {
 		return nil, err
 	}
 
-	var locations []Location
-	err = json.Unmarshal(body, &locations)
+	var resource LocationResource
+	err = json.Unmarshal(body, &resource)
 
 	if err != nil {
 		return nil, err
 	}
-	return locations, nil
+	return resource.Locations, nil
 }
 
 // CreateLocations creates a new location based on the Location struct
@@ -106,7 +110,6 @@ func (bc *Client) CreateLocations(location *[]Location) error {
 
 	reqJSON, _ := json.Marshal(location)
 
-	fmt.Println(string(reqJSON))
 	req := bc.getAPIRequest(http.MethodPost, url, bytes.NewReader(reqJSON))
 	res, err := bc.HTTPClient.Do(req)
 	if err != nil {
