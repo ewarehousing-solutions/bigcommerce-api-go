@@ -1,4 +1,4 @@
-module github.com/TimmyGuy/bigcommerce-api-go
+module github.com/ewarehousing-solutions/bigcommerce-api-go
 
 go 1.17
 

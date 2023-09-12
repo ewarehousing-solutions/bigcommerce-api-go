@@ -1,9 +1,5 @@
 package mocks
 
-import (
-	"github.com/TimmyGuy/bigcommerce-api-go"
-)
-
 type CustomerClient struct {
 	CustomerID int64
 	Email      string

@@ -2,8 +2,6 @@ package mocks
 
 import (
 	"strconv"
-
-	"github.com/TimmyGuy/bigcommerce-api-go"
 )
 
 type CartClient struct {

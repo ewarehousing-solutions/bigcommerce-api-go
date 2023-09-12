@@ -10,6 +10,7 @@ import (
 )
 
 type Location struct {
+	ID                      int64                  `json:"id,omitempty"`
 	Code                    string                 `json:"code"`
 	Label                   string                 `json:"label"`
 	Description             string                 `json:"description"`
@@ -92,7 +93,7 @@ func (bc *Client) GetLocations(filters map[string]string) ([]Location, error) {
 
 	var locations []Location
 	err = json.Unmarshal(body, &locations)
-	print(string(body))
+
 	if err != nil {
 		return nil, err
 	}
