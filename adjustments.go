@@ -38,7 +38,7 @@ func (bc *Client) AdjustInventoryAbsolute(adjustment *Adjustment) error {
 	url := "/v3/inventory/adjustments/absolute"
 
 	reqJSON, _ := json.Marshal(adjustment)
-	req := bc.getAPIRequest(http.MethodPost, url, bytes.NewReader(reqJSON))
+	req := bc.getAPIRequest(http.MethodPut, url, bytes.NewReader(reqJSON))
 	_, err := bc.HTTPClient.Do(req)
 	if err != nil {
 		return err
