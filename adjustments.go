@@ -3,6 +3,7 @@ package bigcommerce
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -25,9 +26,16 @@ func (bc *Client) AdjustInventoryRelative(adjustment *Adjustment) error {
 
 	reqJSON, _ := json.Marshal(adjustment)
 	req := bc.getAPIRequest(http.MethodPost, url, bytes.NewReader(reqJSON))
-	_, err := bc.HTTPClient.Do(req)
+	res, err := bc.HTTPClient.Do(req)
 	if err != nil {
 		return err
+	}
+
+	defer res.Body.Close()
+	body, err := processBody(res)
+
+	if err != nil {
+		return fmt.Errorf("error processing response body: %v %s", err, string(body))
 	}
 
 	return nil
@@ -39,9 +47,16 @@ func (bc *Client) AdjustInventoryAbsolute(adjustment *Adjustment) error {
 
 	reqJSON, _ := json.Marshal(adjustment)
 	req := bc.getAPIRequest(http.MethodPut, url, bytes.NewReader(reqJSON))
-	_, err := bc.HTTPClient.Do(req)
+	res, err := bc.HTTPClient.Do(req)
 	if err != nil {
 		return err
+	}
+
+	defer res.Body.Close()
+	body, err := processBody(res)
+
+	if err != nil {
+		return fmt.Errorf("error processing response body: %v %s", err, string(body))
 	}
 
 	return nil
