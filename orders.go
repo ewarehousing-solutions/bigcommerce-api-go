@@ -1,12 +1,26 @@
 package bigcommerce
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
 )
+
+type UpdateOrder struct {
+	BaseHandlingCost string `json:"base_handling_cost,omitempty"`
+	BaseShippingCost string `json:"base_shipping_cost,omitempty"`
+	BaseWrappingCost string `json:"base_wrapping_cost,omitempty"`
+	ChannelID        int64  `json:"channel_id,omitempty"`
+	CustomerMessage  string `json:"customer_message,omitempty"`
+	CustomerID       int64  `json:"customer_id,omitempty"`
+	StatusID         int64  `json:"status_id,omitempty"`
+	StaffNotes       string `json:"staff_notes,omitempty"`
+	ExternalOrderID  string `json:"external_order_id,omitempty"`
+	CustomerLocale   string `json:"customer_locale,omitempty"`
+}
 
 type Order struct {
 	ID                                      int64        `json:"id"`
@@ -288,6 +302,29 @@ func (bc *Client) GetOrder(orderID int64) (*Order, error) {
 	}
 	order.Coupons = coupons
 	return &order, nil
+}
+
+// UpdateOrder updates an order
+func (bc *Client) UpdateOrder(orderId int64, order *UpdateOrder) error {
+	url := "/v2/orders/" + strconv.FormatInt(orderId, 10)
+
+	// order payload
+	reqJSON, err := json.Marshal(order)
+	if err != nil {
+		return err
+	}
+	req := bc.getAPIRequest(http.MethodPut, url, bytes.NewReader(reqJSON))
+	res, err := bc.HTTPClient.Do(req)
+	if err != nil {
+		return err
+	}
+
+	defer res.Body.Close()
+	_, err = processBody(res)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // GetOrderProducts returns all products for a given order
